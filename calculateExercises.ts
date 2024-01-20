@@ -1,3 +1,5 @@
+import { isNotNumber } from "./utils";
+
 interface DataofWeek { 
     periodLength: number;
     trainingDays: number;
@@ -8,8 +10,26 @@ interface DataofWeek {
     average: number;
   }
 
-const calculatorExercise = (weekExercies: number[], personalTarget: number): DataofWeek => {
 
+  const parseArguments2 = (args: string[]): number[] => {
+
+    //pass at least one day so at least 4 arguments
+    if (args.length < 4) throw new Error('Not enough arguments, include at least one day and target value');
+    if (args.length > 17) throw new Error('Too many arguments, maximum of 14 days allowed');
+    
+    for(let i=2; i<args.length; i++){
+      if(isNotNumber(args[i])){
+        throw new Error('All arguments need to be numbers');
+      }
+    }
+
+    return args.slice(2).map(arg => Number(arg))
+  }
+
+const calculatorExercise = (inputs: number[]): DataofWeek => {
+
+    let weekExercies = inputs.slice(1);
+    let personalTarget = inputs[0];
     let sum = weekExercies.reduce((sum, current) => sum + current, 0);
     let days = weekExercies.length;
     let workDays = weekExercies.filter((day) => day!= 0).length;
@@ -35,7 +55,7 @@ const calculatorExercise = (weekExercies: number[], personalTarget: number): Dat
             trainingDays: workDays,
             success: false,
             rating: 2,
-            ratingDescription: "Target working hours was reached",
+            ratingDescription: "Target working hours was reached or is very close",
             target: personalTarget,
             average: avg
         }
@@ -53,7 +73,8 @@ const calculatorExercise = (weekExercies: number[], personalTarget: number): Dat
 }
 
 try {
-  console.log(calculatorExercise([3, 0, 2, 4.5, 0, 3, 1], 2));
+  const trainings =parseArguments2 (process.argv)
+  console.log(calculatorExercise(trainings));
 } catch (error: unknown) {
   let errorMessage = 'Something went wrong: '
   if (error instanceof Error) {
