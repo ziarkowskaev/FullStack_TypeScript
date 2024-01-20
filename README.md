@@ -1,5 +1,5 @@
 Exercises are a part of Full Stack course. 
-Each branch corsponse to the following exercises. 
+Each branch corresponds to the following exercises. 
 
 ### Branch Part9.1-2
 Includes two calculator, for calculating BMI and assessing number of exercise hours based on personal target. 
